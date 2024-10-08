@@ -4,6 +4,7 @@ using System.Text;
 using UnityEngine;
 using System.Threading;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class ClientUDP : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class ClientUDP : MonoBehaviour
     public GameObject ipInputField;
     TextMeshProUGUI UItext;
     string clientText;
+    bool loadWaitingRoom = false; // Flag to trigger loading the waiting room
 
     void Start()
     {
@@ -33,7 +35,6 @@ public class ClientUDP : MonoBehaviour
             return;
         }
 
-        // Get the TMP_InputField component from the ipInputField GameObject
         TMP_InputField inputField = ipInputField.GetComponent<TMP_InputField>();
 
         if (inputField == null)
@@ -42,59 +43,54 @@ public class ClientUDP : MonoBehaviour
             return;
         }
 
-        // Use the text from the input field
         string serverIP = inputField.text;
-
-        // Start a thread to send a message to the server
         Thread mainThread = new Thread(Send);
         mainThread.Start();
     }
 
-
-
     void Update()
     {
         UItext.text = clientText;
+
+        // Check if we need to load the waiting room scene
+        if (loadWaitingRoom)
+        {
+            loadWaitingRoom = false; // Reset the flag
+            SceneManager.LoadScene("WaitingRoomScene"); // Load the waiting room scene
+        }
     }
 
     void Send()
     {
-        // TO DO 2
-        // Create the server's endpoint (IP and port) and initialize the socket
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050); // Replace with your server's IP and port
-        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp); // UDP socket
+        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050);
+        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-        // TO DO 2.1
-        // Send the Handshake to the server's endpoint
-        string handshake = "Hello World";
+        string playerName = "Player1"; // Replace with the player's actual name
+        string handshake = playerName + " has joined the game.";
         byte[] data = Encoding.ASCII.GetBytes(handshake);
-        socket.SendTo(data, data.Length, SocketFlags.None, ipep); // Send handshake to server
+        socket.SendTo(data, data.Length, SocketFlags.None, ipep);
 
         clientText = "Sent handshake to server: " + handshake;
 
-        // TO DO 5
-        // Start a thread to receive the response from the server
+        // Set the flag to load the waiting room scene
+        loadWaitingRoom = true;
+
         Thread receive = new Thread(Receive);
         receive.Start();
     }
 
     void Receive()
     {
-        // TO DO 5
-        // Prepare to receive data from the server
-        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0); // Sender (server) endpoint
+        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
         EndPoint Remote = (EndPoint)sender;
 
-        byte[] data = new byte[1024]; // Buffer to store received data
+        byte[] data = new byte[1024];
         int recv;
 
-        // Receive data from the server
         try
         {
             recv = socket.ReceiveFrom(data, ref Remote);
-            string receivedMessage = Encoding.ASCII.GetString(data, 0, recv); // Convert received data to string
-
-            // Display the received message
+            string receivedMessage = Encoding.ASCII.GetString(data, 0, recv);
             clientText = $"Message received from {Remote.ToString()}: {receivedMessage}";
         }
         catch (SocketException e)
@@ -102,7 +98,6 @@ public class ClientUDP : MonoBehaviour
             clientText = "Error receiving message: " + e.Message;
         }
 
-        // Optionally, you can close the socket if done
         socket.Close();
     }
 }
