@@ -11,8 +11,10 @@ public class ClientUDP : MonoBehaviour
     Socket socket;
     public GameObject UItextObj;
     public GameObject ipInputField;
+    public GameObject usernameInputField; // New field for username
     TextMeshProUGUI UItext;
     string clientText;
+    string playerName; // Store the player's name
     bool loadWaitingRoom = false; // Flag to trigger loading the waiting room
 
     void Start()
@@ -29,22 +31,37 @@ public class ClientUDP : MonoBehaviour
 
     public void StartClient()
     {
-        if (ipInputField == null)
+        if (ipInputField == null || usernameInputField == null)
         {
-            Debug.LogError("ipInputField is not assigned in the Inspector!");
+            Debug.LogError("ipInputField or usernameInputField is not assigned in the Inspector!");
             return;
         }
 
         TMP_InputField inputField = ipInputField.GetComponent<TMP_InputField>();
+        TMP_InputField usernameField = usernameInputField.GetComponent<TMP_InputField>();
 
-        if (inputField == null)
+        if (inputField == null || usernameField == null)
         {
-            Debug.LogError("ipInputField does not contain a TMP_InputField component!");
+            Debug.LogError("ipInputField or usernameInputField does not contain a TMP_InputField component!");
             return;
         }
 
         string serverIP = inputField.text;
-        Thread mainThread = new Thread(Send);
+        playerName = usernameField.text; // Get the entered username
+
+        if (string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogError("Username cannot be empty!");
+            return;
+        }
+
+        if (!IPAddress.TryParse(serverIP, out IPAddress ipAddress))
+        {
+            Debug.LogError("Invalid IP address!");
+            return;
+        }
+
+        Thread mainThread = new Thread(() => Send(ipAddress));
         mainThread.Start();
     }
 
@@ -60,13 +77,12 @@ public class ClientUDP : MonoBehaviour
         }
     }
 
-    void Send()
+    void Send(IPAddress serverIP)
     {
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050);
+        IPEndPoint ipep = new IPEndPoint(serverIP, 9050);
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-        string playerName = "Player1"; // Replace with the player's actual name
-        string handshake = playerName + " has joined the game.";
+        string handshake = playerName + " has joined the game."; // Use the player's name
         byte[] data = Encoding.ASCII.GetBytes(handshake);
         socket.SendTo(data, data.Length, SocketFlags.None, ipep);
 
@@ -92,6 +108,16 @@ public class ClientUDP : MonoBehaviour
             recv = socket.ReceiveFrom(data, ref Remote);
             string receivedMessage = Encoding.ASCII.GetString(data, 0, recv);
             clientText = $"Message received from {Remote.ToString()}: {receivedMessage}";
+
+            // Notify the Waiting Room Manager about the player's name
+            if (receivedMessage.StartsWith("Welcome"))
+            {
+                WaitingRoomManager waitingRoomManager = FindObjectOfType<WaitingRoomManager>();
+                if (waitingRoomManager != null)
+                {
+                    waitingRoomManager.DisplayPlayerInfo(playerName);
+                }
+            }
         }
         catch (SocketException e)
         {

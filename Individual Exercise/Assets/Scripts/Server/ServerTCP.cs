@@ -16,7 +16,7 @@ public class ServerTCP : MonoBehaviour
 
     public struct User
     {
-        public string name;
+        public string playerName;
         public Socket socket;
     }
 
@@ -32,12 +32,15 @@ public class ServerTCP : MonoBehaviour
 
     public void startServer()
     {
-        serverText = "Starting TCP Server...";
+        serverText = "Starting TCP Server...\n";
+
+        // Get the local IP address
+        string localIP = GetLocalIPAddress();
+        serverText += $"Server IP Address: {localIP}\n";
 
         // Create and bind the socket
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        // Bind the socket to any IP address on port 9050
         IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, 9050);
         socket.Bind(localEndPoint);
 
@@ -45,7 +48,6 @@ public class ServerTCP : MonoBehaviour
         socket.Listen(10);
         serverText += "\nServer listening on port 9050...";
 
-        // Start a thread to check for new connections
         mainThread = new Thread(CheckNewConnections);
         mainThread.Start();
     }
@@ -55,16 +57,13 @@ public class ServerTCP : MonoBehaviour
         while (true)
         {
             User newUser = new User();
-            newUser.name = "";
+            newUser.playerName = "";
 
-            // Accept any incoming clients
             newUser.socket = socket.Accept();
 
-            // Get the remote endpoint (client info)
             IPEndPoint clientEP = (IPEndPoint)newUser.socket.RemoteEndPoint;
             serverText += "\nConnected with " + clientEP.Address.ToString() + " at port " + clientEP.Port.ToString();
 
-            // Start a new thread to handle messages from this client
             Thread newConnection = new Thread(() => Receive(newUser));
             newConnection.Start();
         }
@@ -83,21 +82,17 @@ public class ServerTCP : MonoBehaviour
                 if (recv == 0)
                     break;
 
-                // Convert received data to string
                 string receivedMessage = Encoding.ASCII.GetString(data, 0, recv);
                 serverText += "\nReceived: " + receivedMessage;
 
-                // Send a ping back to the client
                 Send(user);
             }
             catch (SocketException)
             {
-                // Handle socket exceptions
                 break;
             }
         }
 
-        // Close the socket when done
         user.socket.Close();
     }
 
@@ -105,7 +100,21 @@ public class ServerTCP : MonoBehaviour
     {
         string pingMessage = "Ping";
         byte[] data = Encoding.ASCII.GetBytes(pingMessage);
-        user.socket.Send(data); // Send to the client directly via their socket
+        user.socket.Send(data);
         serverText += "\nSent ping to client: " + pingMessage;
+    }
+
+    // Function to get the local IP address
+    string GetLocalIPAddress()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return ip.ToString();
+            }
+        }
+        return "127.0.0.1"; // Default local address if no valid IP is found
     }
 }
