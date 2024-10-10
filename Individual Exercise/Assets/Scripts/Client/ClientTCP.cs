@@ -13,6 +13,7 @@ public class ClientTCP : MonoBehaviour
     TextMeshProUGUI UItext;
     string clientText;
     Socket server;
+    public TMP_InputField chatInputField;
 
     // Add the loadWaitingRoom flag
     bool loadWaitingRoom = false;
@@ -26,13 +27,21 @@ public class ClientTCP : MonoBehaviour
     {
         UItext.text = clientText;
 
-        // Check if we need to load the waiting room scene
+        // Check for sending chat messages
+        if (Input.GetKeyDown(KeyCode.Return) && !string.IsNullOrEmpty(chatInputField.text))
+        {
+            // Pass the chat input text as an argument to SendChatMessage
+            SendChatMessage(chatInputField.text);
+            chatInputField.text = ""; // Clear the input field
+        }
+
         if (loadWaitingRoom)
         {
-            loadWaitingRoom = false; // Reset the flag
-            UnityEngine.SceneManagement.SceneManager.LoadScene("WaitingRoomScene"); // Load the waiting room scene
+            loadWaitingRoom = false;
+            UnityEngine.SceneManagement.SceneManager.LoadScene("WaitingRoomScene");
         }
     }
+
 
     public void StartClient()
     {
@@ -96,6 +105,24 @@ public class ClientTCP : MonoBehaviour
         }
     }
 
+    public void SendChatMessage(string message)
+    {
+        if (!string.IsNullOrEmpty(message))
+        {
+            byte[] data = Encoding.ASCII.GetBytes(message);
+
+            try
+            {
+                server.Send(data);
+                Debug.Log("Chat message sent to server: " + message);
+            }
+            catch (SocketException e)
+            {
+                Debug.LogError("Error sending chat message: " + e.Message);
+            }
+        }
+    }
+
     void Receive()
     {
         byte[] data = new byte[1024];
@@ -109,19 +136,19 @@ public class ClientTCP : MonoBehaviour
                 if (recv == 0) break;
 
                 string receivedMessage = Encoding.ASCII.GetString(data, 0, recv);
-                clientText += "\nReceived: " + receivedMessage;
+
+                // Display the received chat message in the chat box
+                FindObjectOfType<WaitingRoomManager>().DisplayChatMessage(receivedMessage);
                 Debug.Log("Message received from server: " + receivedMessage);
             }
             catch (SocketException e)
             {
-                clientText += "\nError receiving message: " + e.Message;
                 Debug.LogError("Error receiving message: " + e.Message);
                 break;
             }
         }
 
         server.Close();
-        clientText += "\nDisconnected from server.";
         Debug.Log("Disconnected from the server.");
     }
 }

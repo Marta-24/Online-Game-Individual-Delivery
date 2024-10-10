@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 989
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Project
   m_RootView: {fileID: 7}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 48
+  controlID: 125
   draggingID: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -350,7 +350,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Art
+    - Assets/Scenes
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -358,7 +358,7 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Art
+  - Assets/Scenes
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\mllur\Documents\GitHub\Online-Game-Individual-Delivery\Individual
     Exercise
@@ -366,9 +366,9 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: c0610000
-    m_LastClickedID: 25024
-    m_ExpandedIDs: 000000009661000000ca9a3bffffff7f
+    m_SelectedIDs: 48610000
+    m_LastClickedID: 24904
+    m_ExpandedIDs: 00000000366100004a61000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -396,7 +396,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000096610000
+    m_ExpandedIDs: 0000000036610000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -538,7 +538,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 52f8ffff1cfbffff48610000a6620000c8620000
+      m_ExpandedIDs: fc97ffff5a98ffffb498ffff1299fffff09fffff3aa0ffffc0a1ffffeaa1ffff06a2ffffeea3ffff9ea7ffff6aa8ffffa0adffffeaadffff6eafffff98afffffb4afffff7cb1ffffdab7ffff90bdffffeec0ffff38c1ffffb2c2ffffd8c2fffff0c2ffff42c4ffff2ec8ffff7cc8ffffcccbffff16ccffff8ccdffffaecdffffc2cdffff3ed2ffffe2d5ffffacd6ffff12d7ffffe0d8ffff3cdcffff86dcfffffcddffff1edeffff32deffff66dfffff4ae4ffff94e4ffff0ee6ffff34e6ffff4ae6ffff42f0ffff50f1ffffb6f1ffff78f9ffff1cfbffffbe650000886d00003e7200005c7400001a780000bc790000e07d0000027e0000388300006a830000c8870000c08a0000fa8a0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -931,9 +931,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 329.70612, y: 284.41785, z: -1.1745253}
+    m_Target: {x: 486.0065, y: 236.90034, z: -2.5658946}
     speed: 2
-    m_Value: {x: 340.79184, y: 288.58014, z: -0.9763025}
+    m_Value: {x: 486.0065, y: 236.90034, z: -2.5658946}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -983,9 +983,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 460.32153
+    m_Target: 599.45844
     speed: 2
-    m_Value: 440.49908
+    m_Value: 599.45844
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1130,7 +1130,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 693
-    width: 1467
+    width: 1656
     height: 298
   m_SerializedDataModeController:
     m_DataMode: 0

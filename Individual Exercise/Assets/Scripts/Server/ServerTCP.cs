@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Threading;
 using TMPro;
 using System.Text;
+using System.Collections.Generic;
 
 public class ServerTCP : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class ServerTCP : MonoBehaviour
     public GameObject UItextObj;
     TextMeshProUGUI UItext;
     string serverText;
+    private List<User> connectedUsers = new List<User>();
 
     public struct User
     {
@@ -61,6 +63,7 @@ public class ServerTCP : MonoBehaviour
             newUser.playerName = "";
 
             newUser.socket = socket.Accept();
+            connectedUsers.Add(newUser); // Add user to the list
 
             IPEndPoint clientEP = (IPEndPoint)newUser.socket.RemoteEndPoint;
             serverText += "\nConnected with " + clientEP.Address.ToString() + " at port " + clientEP.Port.ToString();
@@ -77,19 +80,37 @@ public class ServerTCP : MonoBehaviour
 
         try
         {
-            recv = user.socket.Receive(data);
-            if (recv == 0) return;
+            while (true)
+            {
+                recv = user.socket.Receive(data);
+                if (recv == 0) break;
 
-            user.playerName = Encoding.ASCII.GetString(data, 0, recv);
-            serverText += "\nPlayer joined: " + user.playerName;
+                string message = Encoding.ASCII.GetString(data, 0, recv);
+                serverText += $"\n{user.playerName}: {message}";
+
+                // Broadcast the message to all connected users
+                BroadcastMessage($"{user.playerName}: {message}");
+            }
         }
         catch (SocketException)
         {
-            serverText += "\nError receiving player name.";
+            serverText += "\nError receiving message.";
         }
+        finally
+        {
+            user.socket.Close();
+            connectedUsers.Remove(user);
+        }
+    }
 
-        Send(user);
-        user.socket.Close();
+    // Function to broadcast messages to all connected users
+    void BroadcastMessage(string message)
+    {
+        byte[] data = Encoding.ASCII.GetBytes(message);
+        foreach (User connectedUser in connectedUsers)
+        {
+            connectedUser.socket.Send(data);
+        }
     }
 
     void Send(User user)
