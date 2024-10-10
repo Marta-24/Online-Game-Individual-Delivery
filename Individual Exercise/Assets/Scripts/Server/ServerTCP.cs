@@ -23,7 +23,9 @@ public class ServerTCP : MonoBehaviour
     void Start()
     {
         UItext = UItextObj.GetComponent<TextMeshProUGUI>();
+        startServer();  // Asegúrate de que esto esté aquí para iniciar el servidor automáticamente
     }
+
 
     void Update()
     {
@@ -40,7 +42,6 @@ public class ServerTCP : MonoBehaviour
 
         // Create and bind the socket
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
         IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, 9050);
         socket.Bind(localEndPoint);
 
@@ -74,37 +75,31 @@ public class ServerTCP : MonoBehaviour
         byte[] data = new byte[1024];
         int recv;
 
-        while (true)
+        try
         {
-            try
-            {
-                recv = user.socket.Receive(data);
-                if (recv == 0)
-                    break;
+            recv = user.socket.Receive(data);
+            if (recv == 0) return;
 
-                string receivedMessage = Encoding.ASCII.GetString(data, 0, recv);
-                serverText += "\nReceived: " + receivedMessage;
-
-                Send(user);
-            }
-            catch (SocketException)
-            {
-                break;
-            }
+            user.playerName = Encoding.ASCII.GetString(data, 0, recv);
+            serverText += "\nPlayer joined: " + user.playerName;
+        }
+        catch (SocketException)
+        {
+            serverText += "\nError receiving player name.";
         }
 
+        Send(user);
         user.socket.Close();
     }
 
     void Send(User user)
     {
-        string pingMessage = "Ping";
+        string pingMessage = "Welcome, " + user.playerName + "!";
         byte[] data = Encoding.ASCII.GetBytes(pingMessage);
         user.socket.Send(data);
-        serverText += "\nSent ping to client: " + pingMessage;
+        serverText += "\nSent welcome message to player: " + user.playerName;
     }
 
-    // Function to get the local IP address
     string GetLocalIPAddress()
     {
         var host = Dns.GetHostEntry(Dns.GetHostName());

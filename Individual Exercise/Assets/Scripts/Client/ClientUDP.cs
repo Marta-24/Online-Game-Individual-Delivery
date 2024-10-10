@@ -88,11 +88,20 @@ public class ClientUDP : MonoBehaviour
 
         clientText = "Sent handshake to server: " + handshake;
 
-        // Set the flag to load the waiting room scene
-        loadWaitingRoom = true;
-
+        // Start a thread to receive the response
         Thread receive = new Thread(Receive);
         receive.Start();
+
+        // Wait for a short period to check if a response is received
+        if (!receive.Join(5000)) // Wait for 5 seconds
+        {
+            clientText = "Server is not responding. Unable to join the waiting room.";
+            socket.Close();
+            return;
+        }
+
+        // Set the flag to load the waiting room scene if server is reachable
+        loadWaitingRoom = true;
     }
 
     void Receive()
@@ -122,8 +131,8 @@ public class ClientUDP : MonoBehaviour
         catch (SocketException e)
         {
             clientText = "Error receiving message: " + e.Message;
+            socket.Close();
         }
-
-        socket.Close();
     }
+
 }

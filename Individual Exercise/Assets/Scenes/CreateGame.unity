@@ -326,6 +326,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1157165147}
   - component: {fileID: 1157165146}
+  - component: {fileID: 1157165148}
   m_Layer: 0
   m_Name: ServerController
   m_TagString: Untagged
@@ -340,7 +341,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1157165145}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b2e5fd8ad1f95b4bb1da05c85017291, type: 3}
   m_Name: 
@@ -361,6 +362,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1157165148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157165145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b3c448234c0134e8d10c1eeba7964b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UItextObj: {fileID: 1835234412}
 --- !u!1 &1835234412
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,7 +409,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 99}
+  m_AnchoredPosition: {x: 0, y: 17}
   m_SizeDelta: {x: 565.3656, y: 400.5033}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1835234414
