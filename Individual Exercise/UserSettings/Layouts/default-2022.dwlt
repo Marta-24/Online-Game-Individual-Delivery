@@ -43,8 +43,8 @@ MonoBehaviour:
     y: 0
     width: 902
     height: 555
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 86
+  controlID: 118
   draggingID: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -250,7 +250,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 87
+  controlID: 48
   draggingID: 0
 --- !u!114 &11
 MonoBehaviour:
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 50}
   m_MaxSize: {x: 24288, y: 8096}
   vertical: 0
-  controlID: 51
+  controlID: 49
   draggingID: 0
 --- !u!114 &12
 MonoBehaviour:
@@ -298,8 +298,8 @@ MonoBehaviour:
     y: 0
     width: 395
     height: 555
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
@@ -350,7 +350,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/Scenes
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -358,7 +358,7 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets
+  - Assets/Scenes
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\mllur\Documents\GitHub\Online-Game-Individual-Delivery\Individual
     Exercise
@@ -366,9 +366,9 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 58620000
-    m_LastClickedID: 25176
-    m_ExpandedIDs: 00000000586200007062000074620000be62000000ca9a3b
+    m_SelectedIDs: e8610000
+    m_LastClickedID: 25064
+    m_ExpandedIDs: 00000000ca610000cc610000e861000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -396,7 +396,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000058620000
+    m_ExpandedIDs: 00000000ca610000cc610000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -538,7 +538,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 3a24ffff8a31ffffe631fffffe40ffff365cffffe45cffff7e5dffffda5dffff545effff2664ffff7064ffff3a66ffff6666ffffa266ffffcc66ffff5470ffff7a70ffffa475ffffee75ffffb877ffffe477ffff2078ffff4878ffff3085ffff748bffffba8bffff328dffff7091ffffbc91ffff8693ffffb293fffff093ffff1a94ffff8aa2ffff8ca2ffffc8a4ffff04a5ffff80a6ffffa8aafffff8aaffffc2acffffeeacffff2cadffff56adffff42bfffffe4faffff8661000094610000e2610000f4610000b4630000be630000c2630000ce6300000064000048640000d46a0000e26a0000f66a0000286b00005c6b0000a66b0000aa6b0000be6b0000da6b0000f06b0000386c0000667500007475000088750000ba750000ee750000227600002e760000387600003c76000050760000627600006c7600007876000082760000ca7600001e7e00002c7e0000407e0000747e0000308100003e8100005281000086810000c4810000508700005487000068870000c48b0000d08b0000e68b0000fc8b00003c8c0000ea8c0000048d00003e8d00004e8d0000f08e0000fe8e0000128f0000448f0000708f00008e900000f6900000
+      m_ExpandedIDs: c077ffff9879ffff287cffffb67cffff307dffff2a87ffffc48affff3a8bffffa68effffcaf5ffff4af8ffffbaf9ffffa4760000b0760000e2760000ec76000006770000ce7a0000227b0000327b0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -931,9 +931,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 555.24457, y: 146.3464, z: -1.4476392}
+    m_Target: {x: 542.52716, y: 135.57233, z: -2.6481028}
     speed: 2
-    m_Value: {x: 555.24457, y: 146.3464, z: -1.4476392}
+    m_Value: {x: 542.52716, y: 135.57233, z: -2.6481028}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -983,9 +983,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 487.63385
+    m_Target: 607.6805
     speed: 2
-    m_Value: 487.63385
+    m_Value: 607.6805
   m_Ortho:
     m_Target: 1
     speed: 2
