@@ -10,8 +10,7 @@ public class ClientUDP : MonoBehaviour
 {
     Socket socket;
     public GameObject UItextObj;
-    public GameObject ipInputField;
-    public GameObject usernameInputField; // New field for username
+    public GameObject usernameInputField; // Username field only
     TextMeshProUGUI UItext;
     string clientText;
     string playerName; // Store the player's name
@@ -31,22 +30,20 @@ public class ClientUDP : MonoBehaviour
 
     public void StartClient()
     {
-        if (ipInputField == null || usernameInputField == null)
+        if (usernameInputField == null)
         {
-            Debug.LogError("ipInputField or usernameInputField is not assigned in the Inspector!");
+            Debug.LogError("usernameInputField is not assigned in the Inspector!");
             return;
         }
 
-        TMP_InputField inputField = ipInputField.GetComponent<TMP_InputField>();
         TMP_InputField usernameField = usernameInputField.GetComponent<TMP_InputField>();
 
-        if (inputField == null || usernameField == null)
+        if (usernameField == null)
         {
-            Debug.LogError("ipInputField or usernameInputField does not contain a TMP_InputField component!");
+            Debug.LogError("usernameInputField does not contain a TMP_InputField component!");
             return;
         }
 
-        string serverIP = inputField.text;
         playerName = usernameField.text; // Get the entered username
 
         if (string.IsNullOrEmpty(playerName))
@@ -55,9 +52,12 @@ public class ClientUDP : MonoBehaviour
             return;
         }
 
+        // Hardcoded server IP address (replace with your server's IP)
+        string serverIP = "192.168.1.10"; // Example IP, replace as needed
+
         if (!IPAddress.TryParse(serverIP, out IPAddress ipAddress))
         {
-            Debug.LogError("Invalid IP address!");
+            Debug.LogError("Invalid hardcoded IP address!");
             return;
         }
 
@@ -134,5 +134,4 @@ public class ClientUDP : MonoBehaviour
             socket.Close();
         }
     }
-
 }
