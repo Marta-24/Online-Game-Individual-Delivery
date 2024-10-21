@@ -5,17 +5,26 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/TCP/CreateGame.unity
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 514f3cdebcce0854d97f2275cd5970a5
+  - enabled: 1
+    path: Assets/Scenes/UDP.unity
+    guid: 5df1fc278e4ca0b4a8f6182dd7dbe0f9
+  - enabled: 1
+    path: Assets/Scenes/TCP.unity
+    guid: 81317aea4b5815a40bbbd0499c32493d
+  - enabled: 1
+    path: Assets/Scenes/TCP/TCPCreateGame.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 0
-    path: Assets/Scenes/TCP/JoinGame.unity
+  - enabled: 1
+    path: Assets/Scenes/TCP/TCPJoinGame.unity
     guid: 6ed4741a2a1d47846baa325f06fc3d54
   - enabled: 1
-    path: Assets/Scenes/UDP/CreateGame.unity
+    path: Assets/Scenes/UDP/UDPCreateGame.unity
     guid: 76f0aa638cf95bb428b4ef280730c423
   - enabled: 1
-    path: Assets/Scenes/UDP/JoinGame.unity
+    path: Assets/Scenes/UDP/UDPJoinGame.unity
     guid: d4d7fdbb3f1f4c54c809dc87ef1776f4
   - enabled: 1
     path: Assets/Scenes/WaitingRoomScene.unity
