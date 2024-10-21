@@ -4,41 +4,22 @@ using System.Text;
 using UnityEngine;
 using System.Threading;
 using TMPro;
+using System.Collections.Generic;
 
 public class ServerUDP : MonoBehaviour
 {
     Socket socket;
-
+    Thread receiveThread = null;
     public GameObject UItextObj;
     TextMeshProUGUI UItext;
     string serverText;
 
+    private List<IPEndPoint> connectedClients = new List<IPEndPoint>();
+
     void Start()
     {
         UItext = UItextObj.GetComponent<TextMeshProUGUI>();
-        startServer();
-    }
-
-    public void startServer()
-    {
-        serverText = "Starting UDP Server...\n";
-
-        // Get the local IP address
-        string localIP = GetLocalIPAddress();
-        serverText += $"Server IP Address: {localIP}\n";
-
-        // Create a UDP socket and bind it to port 9050
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050);
-        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-
-        // Bind the socket to the local endpoint
-        socket.Bind(ipep);
-
-        serverText += "\nUDP Server bound to port 9050";
-
-        // Start a new thread to receive incoming UDP messages
-        Thread newConnection = new Thread(Receive);
-        newConnection.Start();
+        StartServer();
     }
 
     void Update()
@@ -46,43 +27,63 @@ public class ServerUDP : MonoBehaviour
         UItext.text = serverText;
     }
 
-    void Receive()
+    public void StartServer()
     {
-        int recv;
+        serverText = "Starting UDP Server...\n";
+
+        // Get the local IP address
+        string localIP = GetLocalIPAddress();
+        serverText += $"Server IP Address: {localIP}\n";
+
+        IPEndPoint localEp = new IPEndPoint(IPAddress.Any, 9050);
+
+        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        socket.Bind(localEp);
+
+        serverText += "\nServer listening on port 9050...";
+        receiveThread = new Thread(ReceiveMessages);
+        receiveThread.Start();
+    }
+
+    void ReceiveMessages()
+    {
         byte[] data = new byte[1024];
-
-        serverText = serverText + "\n" + "Waiting for new Client...";
-
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-        EndPoint remote = (EndPoint)(sender);
+        EndPoint remote = (EndPoint)sender;
 
         while (true)
         {
-            recv = socket.ReceiveFrom(data, ref remote);
-            if (recv > 0)
-            {
-                string receivedMessage = Encoding.ASCII.GetString(data, 0, recv);
-                serverText = serverText + "\n" + $"Message received from {remote.ToString()}: {receivedMessage}";
+            data = new byte[1024];
+            int recv = socket.ReceiveFrom(data, ref remote);
+            string message = Encoding.ASCII.GetString(data, 0, recv);
 
-                // Send confirmation message back to the client
-                Thread sendPingThread = new Thread(() => Send(remote, receivedMessage));
-                sendPingThread.Start();
+            // If it's the first message, consider it as a "login" (username)
+            if (!connectedClients.Contains((IPEndPoint)remote))
+            {
+                connectedClients.Add((IPEndPoint)remote);
+                serverText += $"\nNew user connected: {message} from {remote}";
+                BroadcastMessage($"{message} has joined the waiting room.", (IPEndPoint)remote);
+            }
+            else
+            {
+                // Broadcast the received message to all other clients
+                BroadcastMessage(message, (IPEndPoint)remote);
             }
         }
     }
 
-    void Send(EndPoint remote, string receivedMessage)
+    void BroadcastMessage(string message, IPEndPoint sender)
     {
-        // Extract player's name from the received message
-        string name = receivedMessage.Split(' ')[0];
-        string pingMessage = $"Welcome {name}, connection confirmed.";
-        byte[] data = Encoding.ASCII.GetBytes(pingMessage);
-
-        socket.SendTo(data, remote);
-        serverText = serverText + "\n" + $"Ping sent to {remote.ToString()}";
+        byte[] data = Encoding.ASCII.GetBytes(message);
+        foreach (IPEndPoint client in connectedClients)
+        {
+            if (!client.Equals(sender)) // Don't send the message to the sender itself
+            {
+                socket.SendTo(data, client);
+            }
+        }
     }
 
-    // Function to get the local IP address
     string GetLocalIPAddress()
     {
         var host = Dns.GetHostEntry(Dns.GetHostName());
